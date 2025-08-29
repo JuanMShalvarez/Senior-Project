@@ -5,17 +5,17 @@
 #define step 200
 
 //servos
-#define front_right_up 11
-#define front_right_down 14
+#define front_left_up 12
+#define front_left_down 13
 
-#define front_left_up 10
-#define front_left_down 15
+#define front_right_up 1
+#define front_right_down 0
 
-#define back_right_up 7
-#define back_right_down 2
+#define back_right_up 14
+#define back_right_down 15
 
-#define back_left_up 6
-#define back_left_down 3
+#define back_left_up 3
+#define back_left_down 2
 
 //SDA (default is GPIO 21)
 //SCL (default is GPIO 22)
@@ -39,10 +39,14 @@
 #define CH5 4
 #define CH6 15
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm0 = Adafruit_PWMServoDriver(0x40);
+Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(0x41);
 
-void setServo(int servo, int angle){
-  pwm.setPWM(servo, 0, map(angle, 0, 180, 102, 512));
+void setServo(int servo, int angle, int address){
+  if(address == 0)
+    pwm0.setPWM(servo, 0, map(angle, 0, 180, 102, 512));
+  if(address == 1)
+    pwm1.setPWM(servo, 0, map(angle, 0, 180, 102, 512));
 }
 
 void setMotor(int rpwm, int lpwm, int ren, int len, int speed) {
@@ -67,34 +71,34 @@ void moveLeg_back_left(float x, float y){
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
 
-  setServo(back_left_up, alfa*180/PI);
-  setServo(back_left_down, beta*180/PI);
-}
-
-void moveLeg_front_left(float x, float y){
-
-  float a = 8;
-  float b = 10;
-  float y0 = Y0;
-  float c = x*x + (y0 - y)*(y0 - y);
-  float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
-  float beta = acos((a*a + b*b - c)/2/a/b);
-
-  setServo(front_left_up, alfa*180/PI);
-  setServo(front_left_down, beta*180/PI);
+  setServo(back_left_up, alfa*180/PI, 0);
+  setServo(back_left_down, beta*180/PI, 0);
 }
 
 void moveLeg_front_right(float x, float y){
 
   float a = 8;
   float b = 10;
-  float y0 = Y0;
+  float y0 = Y0-2;
   float c = x*x + (y0 - y)*(y0 - y);
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
 
-  setServo(front_right_up, 180 - alfa*180/PI);
-  setServo(front_right_down, 180 - beta*180/PI);
+  setServo(front_right_up, alfa*180/PI, 1);
+  setServo(front_right_down, beta*180/PI, 1);
+}
+
+void moveLeg_front_left(float x, float y){
+
+  float a = 8;
+  float b = 10;
+  float y0 = Y0-2;
+  float c = x*x + (y0 - y)*(y0 - y);
+  float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
+  float beta = acos((a*a + b*b - c)/2/a/b);
+
+  setServo(front_left_up, 180 - alfa*180/PI, 0);
+  setServo(front_left_down, 180 - beta*180/PI, 0);
 }
 
 void moveLeg_back_right(float x, float y){
@@ -106,8 +110,8 @@ void moveLeg_back_right(float x, float y){
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
 
-  setServo(back_right_up, 180 - alfa*180/PI);
-  setServo(back_right_down, 180 - beta*180/PI);
+  setServo(back_right_up, 180 - alfa*180/PI, 1);
+  setServo(back_right_down, 180 - beta*180/PI, 1);
 }
 
 void walk(){
@@ -159,15 +163,17 @@ void setup() {
   digitalWrite(REN2, HIGH);
   digitalWrite(LEN2, HIGH);
 
-  // Set up PWM (8-bit, 1kHz)
+  //Set up PWM (8-bit, 1kHz)
   // ledcSetup(0, 1000, 8); ledcAttachPin(RPWM1, 0);
   // ledcSetup(1, 1000, 8); ledcAttachPin(LPWM1, 1);
   // ledcSetup(2, 1000, 8); ledcAttachPin(RPWM2, 2);
   // ledcSetup(3, 1000, 8); ledcAttachPin(LPWM2, 3);
 
   //servo
-  pwm.begin(); 
-  pwm.setPWMFreq(50);
+  pwm0.begin(); 
+  pwm0.setPWMFreq(50);
+  pwm1.begin(); 
+  pwm1.setPWMFreq(50);
   delay(10);
   moveLeg_front_left(0,0);
   moveLeg_back_right(0,0);
