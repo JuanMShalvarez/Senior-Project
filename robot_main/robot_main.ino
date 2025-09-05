@@ -32,12 +32,12 @@
 #define LEN2  13
 
 //reciver
-#define CH1 39
-#define CH2 34
-#define CH3 35
-#define CH4 36
-#define CH5 4
-#define CH6 15
+#define CH1 4 
+#define CH2 15 
+#define CH3 34 
+#define CH4 35 
+#define CH5 39 
+#define CH6 36
 
 Adafruit_PWMServoDriver pwm0 = Adafruit_PWMServoDriver(0x40);
 Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(0x41);

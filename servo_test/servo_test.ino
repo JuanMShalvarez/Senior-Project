@@ -105,12 +105,24 @@ void moveLeg_back_right(float x, float y){
 
 
 void setup() {
-//servo
+  //servo
   pwm0.begin(); 
   pwm0.setPWMFreq(50);
   pwm1.begin(); 
   pwm1.setPWMFreq(50);
   delay(10);
+
+  // Motor 1 enable pins
+  pinMode(REN1, OUTPUT);
+  pinMode(LEN1, OUTPUT);
+  digitalWrite(REN1, HIGH);
+  digitalWrite(LEN1, HIGH);
+
+  // Motor 2 enable pins
+  pinMode(REN2, OUTPUT);
+  pinMode(LEN2, OUTPUT);
+  digitalWrite(REN2, HIGH);
+  digitalWrite(LEN2, HIGH);
 
   moveLeg_front_left(-5,0);
   moveLeg_front_right(-2,0);
@@ -125,26 +137,26 @@ void loop() {
   setMotor(RPWM1, LPWM1, REN1, LEN1, 100);
   setMotor(RPWM2, LPWM2, REN2, LEN2, 100);
 
-  // moveLeg_front_left(1,0);
-  // moveLeg_back_right(-10,2);
-  // moveLeg_back_left(-2,8);
-  // moveLeg_front_right(-7,4);
-  // delay(step);
-  // moveLeg_front_left(1, 4);
-  // moveLeg_back_right(-10,8);
-  // moveLeg_back_left(-2,2);
-  // moveLeg_front_right(-1,0);
-  // delay(step);
-  // moveLeg_front_left(-7,4);
-  // moveLeg_back_right(-2,8);
-  // moveLeg_back_left(-10,2);
-  // moveLeg_front_right(1,0);
-  // delay(step);
-  // moveLeg_front_left(-7,0);
-  // moveLeg_back_right(-2,2);
-  // moveLeg_back_left(-10,8);
-  // moveLeg_front_right(1,4);
-  // delay(step);
+  moveLeg_front_left(1,0);
+  moveLeg_back_right(-10,2);
+  moveLeg_back_left(-2,8);
+  moveLeg_front_right(-7,4);
+  delay(step);
+  moveLeg_front_left(1, 4);
+  moveLeg_back_right(-10,8);
+  moveLeg_back_left(-2,2);
+  moveLeg_front_right(-1,0);
+  delay(step);
+  moveLeg_front_left(-7,4);
+  moveLeg_back_right(-2,8);
+  moveLeg_back_left(-10,2);
+  moveLeg_front_right(1,0);
+  delay(step);
+  moveLeg_front_left(-7,0);
+  moveLeg_back_right(-2,2);
+  moveLeg_back_left(-10,8);
+  moveLeg_front_right(1,4);
+  delay(step);
 
 
 
