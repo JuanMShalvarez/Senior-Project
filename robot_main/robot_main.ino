@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-#define Y0 16
+#define Y0 14
 #define step 200
 
 //servos
@@ -79,7 +79,7 @@ void moveLeg_front_right(float x, float y){
 
   float a = 8;
   float b = 10;
-  float y0 = Y0-2;
+  float y0 = Y0;
   float c = x*x + (y0 - y)*(y0 - y);
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
@@ -92,7 +92,7 @@ void moveLeg_front_left(float x, float y){
 
   float a = 8;
   float b = 10;
-  float y0 = Y0-2;
+  float y0 = Y0;
   float c = x*x + (y0 - y)*(y0 - y);
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
@@ -175,10 +175,10 @@ void setup() {
   pwm1.begin(); 
   pwm1.setPWMFreq(50);
   delay(10);
-  moveLeg_front_left(0,0);
-  moveLeg_back_right(0,0);
-  moveLeg_back_left(0,0);
-  moveLeg_front_right(0,0);
+  // moveLeg_front_left(0,0);
+  // moveLeg_back_right(0,0);
+  // moveLeg_back_left(0,0);
+  // moveLeg_front_right(0,0);
 
 
   //reciver
@@ -190,9 +190,11 @@ void setup() {
   pinMode(CH6, INPUT);
 
 
-  delay(3000);
+  // delay(1000);
 }
 
 void loop() {
-  walk();
+  //walk();
+  // setServo(back_left_up, 90, 0);
+  // setServo(back_left_down, 90, 0);
 }

@@ -1,8 +1,20 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-#define Y0 16
-#define step 250
+#define Y0 15
+#define step 350
+
+int frontXinit = 0;
+int frontYinit = 4;
+
+int frontYstep = 6;
+int frontXstep = 12;
+
+int backXinit = 0;
+int backYinit = 2;
+
+int backYstep = 4;
+int backXstep = 10;
 
 //servos
 #define front_left_up 12
@@ -68,7 +80,7 @@ void moveLeg_front_right(float x, float y){
 
   float a = 8;
   float b = 10;
-  float y0 = Y0-2;
+  float y0 = Y0;
   float c = x*x + (y0 - y)*(y0 - y);
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
@@ -81,7 +93,7 @@ void moveLeg_front_left(float x, float y){
 
   float a = 8;
   float b = 10;
-  float y0 = Y0-2;
+  float y0 = Y0;
   float c = x*x + (y0 - y)*(y0 - y);
   float alfa = acos((c + a*a - b*b)/2/a/sqrt(c)) + acos(x/sqrt(c));
   float beta = acos((a*a + b*b - c)/2/a/b);
@@ -124,53 +136,74 @@ void setup() {
   digitalWrite(REN2, HIGH);
   digitalWrite(LEN2, HIGH);
 
-  moveLeg_front_left(-5,0);
-  moveLeg_front_right(-2,0);
-  moveLeg_back_right(-5,0);
-  moveLeg_back_left(-5,0);
+  moveLeg_front_left(frontXinit, frontYinit);
+  moveLeg_front_right(frontXinit, frontYinit);
+  moveLeg_back_right(backXinit, backYinit);
+  moveLeg_back_left(backXinit, backYinit);
+
+  // setMotor(RPWM1, LPWM1, REN1, LEN1, 50);
+  // setMotor(RPWM2, LPWM2, REN2, LEN2, 50);
+  delay(1000);
+
+  // delay(500);
+  // moveLeg_front_left(-5, 0);
+  // moveLeg_back_right(-5, 0);
+  // delay(500);
+  // moveLeg_front_right(-2, 7);
+  // moveLeg_back_left(-5, 7);
 
   delay(1000);
 }
 
 void loop() {
 
-  setMotor(RPWM1, LPWM1, REN1, LEN1, 100);
-  setMotor(RPWM2, LPWM2, REN2, LEN2, 100);
+  // delay(200);
+  // moveLeg_front_left(-5, 0);
+  // moveLeg_back_right(-5, 0);
+  // delay(200);
+  // moveLeg_front_right(-2, 7);
+  // moveLeg_back_left(-5, 7);
 
-  moveLeg_front_left(1,0);
-  moveLeg_back_right(-10,2);
-  moveLeg_back_left(-2,8);
-  moveLeg_front_right(-7,4);
-  delay(step);
-  moveLeg_front_left(1, 4);
-  moveLeg_back_right(-10,8);
-  moveLeg_back_left(-2,2);
-  moveLeg_front_right(-1,0);
-  delay(step);
-  moveLeg_front_left(-7,4);
-  moveLeg_back_right(-2,8);
-  moveLeg_back_left(-10,2);
-  moveLeg_front_right(1,0);
-  delay(step);
-  moveLeg_front_left(-7,0);
-  moveLeg_back_right(-2,2);
-  moveLeg_back_left(-10,8);
-  moveLeg_front_right(1,4);
-  delay(step);
+  // delay(200);
+  // moveLeg_front_right(-2, 0);
+  // moveLeg_back_left(-5, 0);
+  // delay(200);
+  // moveLeg_front_left(-5, 7);
+  // moveLeg_back_right(-5, 7);
 
+  moveLeg_front_left(frontXinit, frontYinit);
+  moveLeg_back_right(backXinit - backXstep, backYinit);
+  moveLeg_back_left(backXinit, backYinit + backYstep);
+  moveLeg_front_right(frontXinit - frontXstep, frontYinit + frontYstep);
+  delay(step);
+  moveLeg_front_left(frontXinit, frontYinit + frontYstep);
+  moveLeg_back_right(backXinit - backXstep, backYinit + backYstep);
+  moveLeg_back_left(backXinit, backYinit);
+  moveLeg_front_right(frontXinit - frontXstep, frontYinit);
+  delay(step);
+  moveLeg_front_left(frontXinit - frontXstep, frontYinit + frontYstep);
+  moveLeg_back_right(backXinit, backYinit + backYstep);
+  moveLeg_back_left(backXinit - backXstep, backYinit);
+  moveLeg_front_right(frontXinit, frontYinit);
+  delay(step);
+  moveLeg_front_left(frontXinit - frontXstep, frontYinit);
+  moveLeg_back_right(backXinit, backYinit);
+  moveLeg_back_left(backXinit - backXstep, backYinit + backYstep);
+  moveLeg_front_right(frontXinit, frontYinit + frontYstep);
+  delay(step);
 
 
 
   // threeMoveFL();
-  // delay(1000);
+  // delay(step);
   // threeMoveFR();
-  // delay(1000);
+  // delay(step);
   // threeMoveBL();
-  // delay(1000);
+  // delay(step);
   // threeMoveBR();
-  // delay(1000);
+  // delay(step);
   // displace();
-  // delay(1000);
+  // delay(step);
 }
 
 void threeMoveFL(){
@@ -180,8 +213,8 @@ void threeMoveFL(){
   delay(step);
   moveLeg_front_left(-10, 4);
   delay(step);
-  moveLeg_front_left(-10, 0);
-  delay(step);
+  // moveLeg_front_left(-5, 0);
+  // delay(step);
 }
 
 void threeMoveFR(){
@@ -207,15 +240,15 @@ void threeMoveBL(){
 void threeMoveBR(){
   moveLeg_back_right(-8,8);
   delay(step);
-  moveLeg_back_right(0, 8);
+  moveLeg_back_right(-6, 8);
   delay(step);
-  moveLeg_back_right(0, 0);
+  moveLeg_back_right(-6, 6);
   delay(step);
 }
 
 void displace(){
   moveLeg_front_left(-5,0);
   moveLeg_front_right(-2,0);
-  moveLeg_back_left(-5, 0);
-  moveLeg_back_right(-5, 0);
+  moveLeg_back_left(-11, 6);
+  moveLeg_back_right(-11, 6);
 }
